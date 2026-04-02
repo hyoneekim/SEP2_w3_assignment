@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import org.example.shopping_cart.dao.CartItemDAO;
 import org.example.shopping_cart.dao.CartRecordDAO;
 import org.example.shopping_cart.dao.LocalizationStringDAO;
-import org.example.shopping_cart.service.DatabaseConnection;
+import org.example.shopping_cart.dao.DatabaseConnection;
 import org.example.shopping_cart.service.LocalizationService;
 
 import java.sql.Connection;

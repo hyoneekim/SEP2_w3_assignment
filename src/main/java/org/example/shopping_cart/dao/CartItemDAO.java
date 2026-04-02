@@ -1,7 +1,6 @@
 package org.example.shopping_cart.dao;
 
 import org.example.shopping_cart.model.CartItem;
-import org.example.shopping_cart.service.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;

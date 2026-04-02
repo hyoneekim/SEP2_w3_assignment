@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         PATH = "/opt/homebrew/bin:/usr/local/bin:${env.PATH}"
-        DOCKERHUB_REPO = 'hyoneekim/opt2'
+        DOCKERHUB_REPO = 'hyoneekim/shopping-cart'
         DOCKER_IMAGE_TAG = "latest"
         DOCKERHUB_CREDENTIALS_ID = 'docker_hub'
     }

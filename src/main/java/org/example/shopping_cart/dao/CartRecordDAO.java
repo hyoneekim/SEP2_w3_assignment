@@ -1,7 +1,6 @@
 package org.example.shopping_cart.dao;
 
 import org.example.shopping_cart.model.CartRecord;
-import org.example.shopping_cart.service.DatabaseConnection;
 
 import java.sql.*;
 
