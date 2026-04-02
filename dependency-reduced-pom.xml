@@ -56,7 +56,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>org.example.shopping-cart.ShoppingCartApp</mainClass>
+                  <mainClass>org.example.shopping_cart.ShoppingCartApp</mainClass>
                 </transformer>
               </transformers>
             </configuration>

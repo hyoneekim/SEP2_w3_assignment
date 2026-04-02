@@ -115,7 +115,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>org.example.shopping-cart.ShoppingCartApp</mainClass>
+                                    <mainClass>org.example.shopping_cart.ShoppingCartApp</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
