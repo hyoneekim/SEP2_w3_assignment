@@ -19,7 +19,7 @@ pipeline {
 
         stage('build') {
             steps {
-                sh 'mvn install'
+                sh 'mvn clean compile install'
                 sh 'ls -la target/classes'
             }
         }
