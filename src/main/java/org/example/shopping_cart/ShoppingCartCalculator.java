@@ -4,7 +4,8 @@ package org.example.shopping_cart;
  * Pure calculation logic — no JavaFX dependency.
  * Keeps business logic testable with JUnit 5 + JaCoCo.
  */
-public class ShoppingCartCalculator {
+class ShoppingCartCalculator {
+    private ShoppingCartCalculator() {}
 
     /** Returns price × quantity for a single item. */
     public static double itemTotal(double price, int quantity) {

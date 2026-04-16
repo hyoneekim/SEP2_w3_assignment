@@ -1,10 +1,8 @@
 
+
+/* Root */
 .root {
     -fx-font-family: "Noto Sans CJK JP", "Noto Sans CJK JP", "Noto Sans Arabic", "Arial";
-}
-
-/* Root VBox */
-.root {
     -fx-background-color: #f0fae8;
     -fx-padding: 20px;
     -fx-spacing: 15px;
@@ -53,11 +51,6 @@
     -fx-background-color: #1f4a00;
 }
 
-/* Button Pressed Effect */
-.button:pressed {
-    -fx-background-color: #0a1f00;
-    -fx-effect: none;
-}
 
 /* Result Label */
 #lblResult {

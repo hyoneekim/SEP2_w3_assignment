@@ -19,7 +19,7 @@ pipeline {
 
         stage('build') {
             steps {
-                sh 'mvn clean compile install'
+                sh 'mvn clean verify'
             }
         }
 
@@ -30,9 +30,9 @@ pipeline {
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                         sh """
                             ${tool 'SonarScanner'}/bin/sonar-scanner \
-                            -Dsonar.projectKey=shopping_cart \
+                            -Dsonar.projectKey=shopping-cart \
                             -Dsonar.sources=src \
-                            -Dsonar.projectName=shopping_cart \
+                            -Dsonar.projectName=shopping-cart \
                             -Dsonar.host.url=http://localhost:9000 \
                             -Dsonar.login=${SONAR_TOKEN} \
                             -Dsonar.java.binaries=${WORKSPACE}/target/classes

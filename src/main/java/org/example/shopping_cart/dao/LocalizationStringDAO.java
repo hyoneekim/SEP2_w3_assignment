@@ -3,9 +3,13 @@ package org.example.shopping_cart.dao;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
+
 
 public class LocalizationStringDAO {
+    private static final Logger logger = Logger.getLogger(LocalizationStringDAO.class.getName());
 
+    private LocalizationStringDAO() {}
     /**
      * Insert a single localization key-value pair.
      */
@@ -20,7 +24,7 @@ public class LocalizationStringDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.err.println("Failed to insert localization string: " + e.getMessage());
+            logger.info("Failed to insert localization string: " + e.getMessage());
         }
     }
 
@@ -39,7 +43,7 @@ public class LocalizationStringDAO {
                 map.put(rs.getString("key"), rs.getString("value"));
             }
         } catch (SQLException e) {
-            System.err.println("Failed to fetch localization strings: " + e.getMessage());
+            logger.info("Failed to fetch localization strings: " + e.getMessage());
         }
         return map;
     }
@@ -58,7 +62,7 @@ public class LocalizationStringDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.err.println("Failed to update localization string: " + e.getMessage());
+            logger.info("Failed to update localization string: " + e.getMessage());
         }
     }
 
@@ -74,7 +78,7 @@ public class LocalizationStringDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.err.println("Failed to delete localization strings: " + e.getMessage());
+            logger.info("Failed to delete localization strings: " + e.getMessage());
         }
     }
 }

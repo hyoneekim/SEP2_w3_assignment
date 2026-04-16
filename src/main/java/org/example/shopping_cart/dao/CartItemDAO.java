@@ -5,9 +5,13 @@ import org.example.shopping_cart.model.CartItem;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
 
 public class CartItemDAO {
+    private static final Logger logger = Logger.getLogger(CartItemDAO.class.getName());
 
+    private CartItemDAO() {}
     /**
      * Insert a single cart item linked to a cart record.
      */
@@ -25,7 +29,7 @@ public class CartItemDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.err.println("Failed to insert cart item: " + e.getMessage());
+            logger.info("Failed to insert cart item: " + e.getMessage());
         }
     }
 
@@ -33,7 +37,6 @@ public class CartItemDAO {
      * Insert all items for a cart record in one call.
      */
     public static void insertAllCartItems(int cartRecordId, List<double[]> items) {
-        // items: each double[] is {price, quantity}
         for (int i = 0; i < items.size(); i++) {
             double price    = items.get(i)[0];
             int    quantity = (int) items.get(i)[1];
@@ -46,7 +49,7 @@ public class CartItemDAO {
      */
     public static List<CartItem> getItemsByCartRecordId(int cartRecordId) {
         List<CartItem> list = new ArrayList<>();
-        String sql = "SELECT * FROM cart_items WHERE cart_record_id = ? ORDER BY item_number";
+        String sql = "SELECT id,cart_record_id,item_number,price, quantity, subtotal FROM cart_items WHERE cart_record_id = ? ORDER BY item_number";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -63,7 +66,7 @@ public class CartItemDAO {
                 ));
             }
         } catch (SQLException e) {
-            System.err.println("Failed to fetch cart items: " + e.getMessage());
+            logger.info("Failed to fetch cart items: " + e.getMessage());
         }
         return list;
     }

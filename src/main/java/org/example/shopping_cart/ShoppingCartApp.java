@@ -22,10 +22,8 @@ public class ShoppingCartApp extends Application {
         }
 
         if (fxmlUrl == null) {
-            throw new RuntimeException(
-                    "Cannot find shopping-cart-view.fxml. " +
-                            "Make sure it is in src/main/resources/ (directly, not in a subfolder)."
-            );
+            throw new IllegalArgumentException("Unable to load shopping-cart-view.fxml");
+
         }
 
         FXMLLoader loader = new FXMLLoader(fxmlUrl);

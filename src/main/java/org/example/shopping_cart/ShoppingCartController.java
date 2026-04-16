@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ShoppingCartController {
 
@@ -37,7 +39,9 @@ public class ShoppingCartController {
     private final List<TextField> quantityFields = new ArrayList<>();
     private GridPane itemGrid;
 
-    // DB에서 불러온 현재 언어의 번역 문자열 저장
+    private static final Logger logger = Logger.getLogger(ShoppingCartController.class.getName());
+
+
     private Map<String, String> currentStrings = new HashMap<>();
 
     private Connection connection;
@@ -54,7 +58,7 @@ public class ShoppingCartController {
         try {
             connection = DatabaseConnection.getConnection();
         } catch (Exception e) {
-            System.err.println("DB connection error: " + e.getMessage());
+            logger.info("DB connection error: " + e.getMessage());
         }
     }
 
@@ -95,9 +99,8 @@ public class ShoppingCartController {
         Map<String, String> dbStrings = LocalizationStringDAO.getStringsByLanguage(langCode);
 
         if (dbStrings.isEmpty()) {
-            System.err.println("No strings found in DB for language: " + langCode
-                    + " — falling back to ResourceBundle.");
-            // DB에 데이터 없으면 기존 LocalizationService 폴백
+            logger.info("No strings found in DB for language: falling back to ResourceBundle.");
+
             LocalizationService.getInstance().setLanguage(langCode);
             for (String key : List.of(
                     "confirm.language","enter.num.items","num.items.prompt","enter.items",
@@ -138,7 +141,7 @@ public class ShoppingCartController {
                 return rs.getString("value");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.info(e.getMessage());
         }
         return null;
     }
@@ -223,13 +226,13 @@ public class ShoppingCartController {
             String langCode = LANG_CODES[currentLangIndex];
             int recordId = CartRecordDAO.insertCartRecord(items.size(), total, langCode);
             if (recordId == -1) {
-                System.err.println("DB save failed: could not insert cart record.");
+                logger.info("DB save failed: could not insert cart record.");
                 return;
             }
             CartItemDAO.insertAllCartItems(recordId, items);
-            System.out.println("Saved to DB — record ID: " + recordId);
+            logger.log(Level.INFO, "Saved to DB — record ID: {0}", recordId);
         } catch (Exception e) {
-            System.err.println("DB save error: " + e.getMessage());
+            logger.info("DB save error: " + e.getMessage());
         }
     }
 

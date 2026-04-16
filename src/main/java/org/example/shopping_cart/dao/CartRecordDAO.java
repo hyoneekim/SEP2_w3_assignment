@@ -4,7 +4,13 @@ import org.example.shopping_cart.model.CartRecord;
 
 import java.sql.*;
 
+import java.util.logging.Logger;
+
+
 public class CartRecordDAO {
+    private CartRecordDAO() {}
+    private static final Logger logger = Logger.getLogger(CartRecordDAO.class.getName());
+
 
     /**
      * Insert a new cart record and return its generated ID.
@@ -24,7 +30,7 @@ public class CartRecordDAO {
                 return keys.getInt(1);
             }
         } catch (SQLException e) {
-            System.err.println("Failed to insert cart record: " + e.getMessage());
+            logger.info("Failed to insert cart record: " + e.getMessage());
         }
         return -1;
     }
@@ -33,7 +39,7 @@ public class CartRecordDAO {
      * Fetch a single cart record by ID.
      */
     public static CartRecord getCartRecordById(int id) {
-        String sql = "SELECT * FROM cart_records WHERE id = ?";
+        String sql = "SELECT id, total_items, language,created_at FROM cart_records WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -43,7 +49,7 @@ public class CartRecordDAO {
                 return mapRow(rs);
             }
         } catch (SQLException e) {
-            System.err.println("Failed to fetch cart record: " + e.getMessage());
+            logger.info("Failed to fetch cart record: " + e.getMessage());
         }
         return null;
     }
@@ -59,7 +65,7 @@ public class CartRecordDAO {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Failed to delete cart record: " + e.getMessage());
+            logger.info("Failed to delete cart record: " + e.getMessage());
         }
     }
 

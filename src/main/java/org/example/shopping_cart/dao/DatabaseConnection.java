@@ -4,15 +4,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import java.util.logging.Logger;
+
+
 public class DatabaseConnection {
 
     private static Connection connection;
+    private static final Logger logger = Logger.getLogger(DatabaseConnection.class.getName());
 
     private DatabaseConnection() {}
 
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
-            // 환경변수 우선, 없으면 로컬 개발용 기본값 사용
+
             String host     = System.getenv().getOrDefault("DB_HOST",     "localhost");
             String port     = System.getenv().getOrDefault("DB_PORT",     "3306");
             String dbName   = System.getenv().getOrDefault("DB_NAME",     "shopping_cart_localization");
@@ -35,7 +39,7 @@ public class DatabaseConnection {
                 connection.close();
             }
         } catch (SQLException e) {
-            System.err.println("Failed to close connection: " + e.getMessage());
+            logger.info("Failed to close connection");
         }
     }
 }

@@ -5,26 +5,32 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-//Singleton class
-//Only change make call and get resource bundle when language change and app start up, reduce lag
 public class LocalizationService {
-    private static Locale currentLocale;
-    private static ResourceBundle resourceBundle;
+    private static final String BUNDLE_BASE_NAME = "i18n.MessagesBundle";
+
+    private static final Map<String, Locale> LOCALE_MAP = new HashMap<>();
+    static {
+        LOCALE_MAP.put("EN", Locale.of("en", "GB"));
+        LOCALE_MAP.put("FI", Locale.of("fi", "FI"));
+        LOCALE_MAP.put("SV", Locale.of("sv", "SE"));
+        LOCALE_MAP.put("JP", Locale.of("ja", "JP"));
+        LOCALE_MAP.put("AR", Locale.of("ar", "SA"));
+    }
+    private static final Locale DEFAULT_LOCALE = Locale.of("en", "GB");
+
+    private Locale currentLocale;
+    private ResourceBundle resourceBundle;
     private static LocalizationService instance;
-    private static Map<String, String> localizedStrings = new HashMap<>();
-    private static int langint;
-    private static String currentPage = "home";
+    private final Map<String, String> localizedStrings = new HashMap<>();
+    private int langint;
+    private String currentPage = "home";
 
     private LocalizationService() {
-        currentLocale = new  Locale("en", "GB");
-        if (resourceBundle == null) {
-            resourceBundle = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
-        }
-        for (String resourceKey : resourceBundle.keySet()) {
-            localizedStrings.put(resourceKey, resourceBundle.getString(resourceKey));
-        }
+        currentLocale = DEFAULT_LOCALE;
+        loadBundle();
         langint = 0;
     }
+
     public static LocalizationService getInstance() {
         if (instance == null) {
             instance = new LocalizationService();
@@ -32,25 +38,15 @@ public class LocalizationService {
         return instance;
     }
 
-    // used to get current lang so that the time in eventDetailPopUp can be adjusted appropriately
-    public static Locale getCurrentLocale() {
+    public Locale getCurrentLocale() {
         return currentLocale;
     }
 
     public ResourceBundle getResourceBundle() {
-        if (resourceBundle == null) {
-            resourceBundle = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
-        }
         return resourceBundle;
     }
 
     public String getLocalizedString(String key) {
-        if (resourceBundle == null) {
-            resourceBundle = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
-            for (String resourceKey : resourceBundle.keySet()) {
-                localizedStrings.put(resourceKey, resourceBundle.getString(resourceKey));
-            }
-        }
         return localizedStrings.get(key);
     }
 
@@ -62,40 +58,30 @@ public class LocalizationService {
         return currentPage;
     }
 
-    public void setCurrentPage(String currentPage) {
-        this.currentPage = currentPage;
+    public void setCurrentPage(String page) {
+        this.currentPage = page;
     }
 
     public void setLanguage(String language) {
-        switch (language) {
-            case "EN":
-                currentLocale = new Locale("en", "GB");
-                langint = 0;
-                break;
-            case "FI":
-                currentLocale = new Locale("fi", "FI");
-                langint = 1;
-                break;
-            case "SV":
-                currentLocale = new Locale("sv", "SE");
-                langint = 2;
-                break;
-            case "JP":
-                currentLocale = new Locale("ja", "JP");
-                langint = 3;
-                break;
-            case "AR":
-                currentLocale = new Locale("ar", "SA");
-                langint = 4;
-                break;
-            default:
-                currentLocale = new Locale("en", "GB");
-                langint = 0;
-        }
-        resourceBundle = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
-        for (String resourceKey : resourceBundle.keySet()) {
-            localizedStrings.put(resourceKey, resourceBundle.getString(resourceKey));
-        }
+        currentLocale = LOCALE_MAP.getOrDefault(language, DEFAULT_LOCALE);
+        langint = new java.util.ArrayList<>(LOCALE_MAP.keySet())
+                .indexOf(language) == -1 ? 0 : getLangIndex(language);
+        loadBundle();
     }
 
+    private int getLangIndex(String language) {
+        String[] order = {"EN", "FI", "SV", "JP", "AR"};
+        for (int i = 0; i < order.length; i++) {
+            if (order[i].equals(language)) return i;
+        }
+        return 0;
+    }
+
+    private void loadBundle() {
+        resourceBundle = ResourceBundle.getBundle(BUNDLE_BASE_NAME, currentLocale);
+        localizedStrings.clear();
+        for (String key : resourceBundle.keySet()) {
+            localizedStrings.put(key, resourceBundle.getString(key));
+        }
+    }
 }
