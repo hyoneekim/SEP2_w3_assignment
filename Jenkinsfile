@@ -27,20 +27,19 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQubeServer') {
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                        bat """
-                            ${tool 'SonarScanner'}\\bin\\sonar-scanner ^
-                            -Dsonar.projectKey=shopping_cart ^
-                            -Dsonar.sources=src ^
-                            -Dsonar.projectName=shopping_cart ^
-                            -Dsonar.host.url=http://localhost:9000 ^
-                            -Dsonar.login=%SONAR_TOKEN% ^
+                        sh """
+                            ${tool 'SonarScanner'}/bin/sonar-scanner \
+                            -Dsonar.projectKey=shopping_cart \
+                            -Dsonar.sources=src \
+                            -Dsonar.projectName=shopping_cart \
+                            -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.login=${SONAR_TOKEN} \
                             -Dsonar.java.binaries=target/classes
                         """
                     }
                 }
             }
         }
-
         stage('Build Docker image') {
             steps {
                 sh '''
