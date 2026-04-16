@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+            jdk 'JDK21'
+    }
 
     environment {
         PATH = "/opt/homebrew/bin:/usr/local/bin:${env.PATH}"
