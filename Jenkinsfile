@@ -20,8 +20,10 @@ pipeline {
         stage('build') {
             steps {
                 sh 'mvn install'
+                sh 'ls -la target/classes'
             }
         }
+
 
         stage('SonarQube Analysis') {
             steps {
@@ -34,7 +36,7 @@ pipeline {
                             -Dsonar.projectName=shopping_cart \
                             -Dsonar.host.url=http://localhost:9000 \
                             -Dsonar.login=${SONAR_TOKEN} \
-                            -Dsonar.java.binaries=target/classes
+                            -Dsonar.java.binaries=${WORKSPACE}/target/classes
                         """
                     }
                 }
