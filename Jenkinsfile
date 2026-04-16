@@ -20,7 +20,6 @@ pipeline {
         stage('build') {
             steps {
                 sh 'mvn clean compile install'
-                sh 'ls -la target/classes'
             }
         }
 
@@ -46,7 +45,6 @@ pipeline {
             steps {
                 sh '''
                     docker build \
-                        --platform linux/amd64 \
                         -t ${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} \
                         .
                 '''
